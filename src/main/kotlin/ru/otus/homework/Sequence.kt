@@ -25,11 +25,22 @@ fun List<RandomNumber>.sequenceTransformation(take: Int = 5) =
         .filter { random -> random.filter { it >= 0 } }
         .map { it.stringify() }
         .take(take)
+        .log()
         .toSet()
 
 fun createList(length: Int = 10): List<RandomNumber> {
     return (1..length).map { RandomNumber() }
 }
+
+class LogSequence<T>(private val parent: Sequence<T>) : Sequence<T> {
+    override fun iterator() = object : Iterator<T> {
+        private val pi = parent.iterator()
+        override fun hasNext(): Boolean = pi.hasNext()
+        override fun next(): T = pi.next().also { println("Logging: $it") }
+    }
+}
+
+fun <T> Sequence<T>.log(): Sequence<T> = LogSequence(this)
 
 class RandomNumber {
     val value: Int = Random.nextInt(-10, 10)
