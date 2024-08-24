@@ -9,10 +9,20 @@ fun main() {
 
     println("Collection transformation:")
     println(list.collectionTransform())
+
+    println("Sequence transformation:")
+    println(list.sequenceTransformation())
 }
 
 fun List<RandomNumber>.collectionTransform(take: Int = 5) =
     filter { random -> random.filter { it >= 0 } }
+        .map { it.stringify() }
+        .take(take)
+        .toSet()
+
+fun List<RandomNumber>.sequenceTransformation(take: Int = 5) =
+    asSequence()
+        .filter { random -> random.filter { it >= 0 } }
         .map { it.stringify() }
         .take(take)
         .toSet()
