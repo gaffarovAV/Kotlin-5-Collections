@@ -3,15 +3,11 @@ package ru.otus.homework
 import kotlin.random.Random
 
 fun main() {
-    val list = createList(10)
-    println("Source list:")
-    println(list)
-
     println("Collection transformation:")
-    println(list.collectionTransform())
+    println(createList(10).collectionTransform())
 
     println("Sequence transformation:")
-    println(list.sequenceTransformation())
+    println(createSequence().sequenceTransformation())
 }
 
 fun List<RandomNumber>.collectionTransform(take: Int = 5) =
@@ -20,9 +16,8 @@ fun List<RandomNumber>.collectionTransform(take: Int = 5) =
         .take(take)
         .toSet()
 
-fun List<RandomNumber>.sequenceTransformation(take: Int = 5) =
-    asSequence()
-        .filter { random -> random.filter { it >= 0 } }
+fun Sequence<RandomNumber>.sequenceTransformation(take: Int = 5) =
+    filter { random -> random.filter { it >= 0 } }
         .map { it.stringify() }
         .take(take)
         .log()
@@ -30,6 +25,10 @@ fun List<RandomNumber>.sequenceTransformation(take: Int = 5) =
 
 fun createList(length: Int = 10): List<RandomNumber> {
     return (1..length).map { RandomNumber() }
+}
+
+fun createSequence(): Sequence<RandomNumber> = generateSequence {
+    RandomNumber()
 }
 
 class LogSequence<T>(private val parent: Sequence<T>) : Sequence<T> {
